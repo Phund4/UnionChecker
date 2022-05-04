@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "CSConnection.Client/1.0.0": {
+        "dependencies": {
+          "CSConnection.Server": "1.0.0"
+        },
+        "runtime": {
+          "CSConnection.Client.dll": {}
+        }
+      },
+      "CSConnection.Server/1.0.0": {
+        "runtime": {
+          "CSConnection.Server.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CSConnection.Client/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CSConnection.Server/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
