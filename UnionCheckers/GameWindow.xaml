@@ -1,0 +1,163 @@
+﻿<Window x:Class="UnionCheckers.GameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UnionCheckers"
+        mc:Ignorable="d"
+        Title="GameWindow" Height="877" Width="690">
+    <Window.Resources>
+        <ResourceDictionary Source="Styles.xaml"></ResourceDictionary>
+    </Window.Resources>
+
+    <DockPanel>
+
+        <Grid DockPanel.Dock="Top" Height="51">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="78*"></ColumnDefinition>
+                <ColumnDefinition Width="395*"></ColumnDefinition>
+                <ColumnDefinition Width="217*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Button Content="IP" Click="GetIP_Click" 
+                    Style="{x:Null}" Background="LightGreen" Foreground="White"></Button>
+
+            <Button Content="В главное меню" Click="ToMainMenu_Click" 
+                    Grid.Column="2" Style="{x:Null}" Background="LightGreen" Foreground="White"></Button>
+        </Grid>
+
+        <TextBox DockPanel.Dock="Bottom"  IsReadOnly="True" Style="{StaticResource ForTextBoxes}" Height="60">
+
+        </TextBox>
+
+        <Grid x:Name="Field" DockPanel.Dock="Bottom" ShowGridLines="False" Height="670">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="37*"></ColumnDefinition>
+                <ColumnDefinition Width="618*"></ColumnDefinition>
+                <ColumnDefinition Width="35*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="33*"></RowDefinition>
+                <RowDefinition Height="601*"></RowDefinition>
+                <RowDefinition Height="36*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Image Source="Field.png" Grid.ColumnSpan="3" Grid.RowSpan="3" />
+
+
+            <Grid x:Name="Shashki" ShowGridLines="False"
+                  DockPanel.Dock="Bottom" Grid.Row="1" Grid.Column="1">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="76*"></ColumnDefinition>
+                    <ColumnDefinition Width="75*"></ColumnDefinition>
+                    <ColumnDefinition Width="75*"></ColumnDefinition>
+                    <ColumnDefinition Width="74*"></ColumnDefinition>
+                    <ColumnDefinition Width="75*"></ColumnDefinition>
+                    <ColumnDefinition Width="75*"></ColumnDefinition>
+                    <ColumnDefinition Width="75*"></ColumnDefinition>
+                    <ColumnDefinition Width="77*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="76*"></RowDefinition>
+                    <RowDefinition Height="75*"></RowDefinition>
+                    <RowDefinition Height="75*"></RowDefinition>
+                    <RowDefinition Height="75*"></RowDefinition>
+                    <RowDefinition Height="75*"></RowDefinition>
+                    <RowDefinition Height="75*"></RowDefinition>
+                    <RowDefinition Height="75*"></RowDefinition>
+                    <RowDefinition Height="75*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Button Grid.Column="1" Grid.Row="0" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="3" Grid.Row="0" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="5" Grid.Row="0" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="7" Grid.Row="0" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="0" Grid.Row="1" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="2" Grid.Row="1" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="4" Grid.Row="1" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="6" Grid.Row="1" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="1" Grid.Row="2" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="3" Grid.Row="2" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="5" Grid.Row="2" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <Button Grid.Column="7" Grid.Row="2" Style="{StaticResource ForWhiteDraught}" 
+                        Click="ClickOnWhite"></Button>
+
+                <!--******************************************************************************************************-->
+
+                <Button Grid.Column="0" Grid.Row="5" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="2" Grid.Row="5" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="4" Grid.Row="5" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="6" Grid.Row="5" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="1" Grid.Row="6" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="3" Grid.Row="6" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="5" Grid.Row="6" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="7" Grid.Row="6" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="0" Grid.Row="7" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="2" Grid.Row="7" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="4" Grid.Row="7" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+
+                <Button Grid.Column="6" Grid.Row="7" Style="{StaticResource ForBlackDraught}"
+                        Click="ClickOnBlack"></Button>
+            </Grid>
+
+        </Grid>
+
+        <TextBox DockPanel.Dock="Top" IsReadOnly="True" Style="{StaticResource ForTextBoxes}" Height="60">
+
+        </TextBox>
+
+    </DockPanel>
+</Window>
