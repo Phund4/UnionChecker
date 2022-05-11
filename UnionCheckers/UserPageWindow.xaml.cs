@@ -19,6 +19,10 @@ namespace UnionCheckers
     /// </summary>
     public partial class UserPageWindow : Window
     {
+        public static string nickServer;
+        public static int ratingServer;
+        public static string nickClient;
+        public static int ratingClient;
         public UserPageWindow()
         {
             var db = new DB();
@@ -32,6 +36,8 @@ namespace UnionCheckers
 
         private void Button_New_Game_Click(object sender, RoutedEventArgs e)
         {
+            nickServer = Login.authUser.Login;
+            ratingServer = (int)Login.authUser.Rating;
             GameWindow gameWindow = new GameWindow();
             gameWindow.Show();
             Close();
@@ -39,7 +45,9 @@ namespace UnionCheckers
 
         private void Button_Connect_Click(object sender, RoutedEventArgs e)
         {
-            GameWindow gameWindow = new GameWindow();
+            nickClient = Login.authUser.Login;
+            ratingClient = (int)Login.authUser.Rating;
+            GameWindowClient gameWindow = new GameWindowClient();
             gameWindow.Show();
             Close();
         }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Media;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,10 +28,15 @@ namespace UnionCheckers
         private int index;
         private int CountMoveWhite;
         private int CountMoveBlack;
-        private SoundPlayer sp;
+        public SoundPlayer sp;
+        //private static TcpClient _client; // объект для подключения к серверу
+        //private static NetworkStream _stream; // объект для обмена данными с сервером
 
         public GameWindowClient()
         {
+            //var ip = "";
+            //_client = new TcpClient(ip, 9050); //TODO Ввод ip, полученного от сервера, вручную 
+            //_stream = _client.GetStream();
             InitializeComponent();
             index = 0;
             CountMoveWhite = 1;
@@ -37,9 +44,71 @@ namespace UnionCheckers
             InitGreenButtons();
             BlockDraughts("Black", ClickOnBlack);
             sp = new SoundPlayer();
-            sp.SoundLocation = @"step.wav";
+            sp.SoundLocation = "step.wav";
             sp.Load();
         }
+
+        #region Connection
+
+        ///// <summary>
+        ///// Приём сообщения
+        ///// </summary>
+        ///// <returns>Возвращает строку с координатами необходимых перемещений на поле сервера</returns>
+        //private static string ReceiveMessage()
+        //{
+        //    var bytes = new byte[20];
+        //    _stream.Read(bytes, 0, bytes.Length);
+        //    return Encoding.UTF8.GetString(bytes);
+        //}
+
+        ///// <summary>
+        ///// Отправка сообщения
+        ///// </summary>
+        ///// <param name="message"> Координаты для клиента, для изменений на его поле</param>
+        //private static void SendMessage(string message)
+        //{
+        //    var bytes = Encoding.UTF8.GetBytes(message);
+        //    _stream.Write(bytes, 0, bytes.Length); // запись байтов в поток
+        //    _stream.Flush();
+        //}
+
+        ///// <summary>
+        ///// Обмен данными об игроках
+        ///// </summary>
+        ///// <param name="playerData"> Сведения об игроке: никнэйм и рейтинг игрока</param>
+        ///// <returns> Данные о противнике: никнэйм и рейтинг противника</returns>
+        //private static string DataChanging(string playerData)
+        //{
+        //    SendMessage(playerData);
+
+        //    return ReceiveMessage();
+        //}
+
+        //private static void Connect(string ip)
+        //{
+        //    try
+        //    {
+        //        var playerData = "Player_Client, 111"; //TODO активное получение данных о самом себе для пересылки и отображения
+        //        var enemyData = DataChanging(playerData); //TODO отобразить данные на игровом поле
+
+        //        while (true)
+        //        {
+        //            var receivedMessage = ReceiveMessage();
+        //            if (receivedMessage == "stop") break;
+
+        //            var message = Console.ReadLine();
+        //            SendMessage(message);
+        //            if (message == "stop") break;
+        //        }
+
+        //        _client.Close(); // разрыв подключения
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //    }
+        //}
+        #endregion Connection
 
         #region GameModul
 
@@ -57,6 +126,7 @@ namespace UnionCheckers
         {
             if (IsWin("White", "WhiteQueen"))
             {
+                Login.authUser.Rating++;
                 MessageBox.Show("Черные победили!");
                 Close();
                 var window = new UserPageWindow();
@@ -64,6 +134,7 @@ namespace UnionCheckers
             }
             else if (IsWin("Black", "BlackQueen"))
             {
+                Login.authUser.Rating--;
                 MessageBox.Show("Белые победили!");
                 Close();
                 var window = new UserPageWindow();
@@ -688,7 +759,5 @@ namespace UnionCheckers
             window.Show();
             Close();
         } // Вернуться в главное меню
-
-
     }
 }

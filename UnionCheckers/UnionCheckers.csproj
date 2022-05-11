@@ -236,7 +236,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="packages.config" />
@@ -249,22 +249,24 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Black.png" />
+    <Resource Include="Images\Black.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="BlackQueen.png" />
+    <Resource Include="Images\BlackQueen.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Field.png" />
+    <Resource Include="Images\Field.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="WhiteQueen.png" />
+    <Resource Include="Images\WhiteQueen.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="White.png" />
+    <Resource Include="Images\White.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images\" />
+    <EmbeddedResource Include="step.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.4.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.4.0\build\MaterialDesignThemes.targets')" />

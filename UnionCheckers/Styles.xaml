@@ -5,7 +5,10 @@
 
         <Setter Property="ItemsControl.Background" Value="PaleGoldenrod"/>
         <Setter Property="ItemsControl.Height" Value="40"/>
-
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="ItemsControl.Height" Value="60"/>
+        <Setter Property="ItemsControl.FontSize" Value="20"/>
+        <Setter Property="ItemsControl.FontStyle" Value="Italic"/>
     </Style>
 
     <Style TargetType="{x:Type Button}" x:Key="ForDraught">
@@ -37,7 +40,7 @@
                 <ControlTemplate TargetType="Button">
                     <Ellipse>
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="Black.png" Stretch="UniformToFill"/>
+                            <ImageBrush ImageSource="Images\Black.png" Stretch="UniformToFill"/>
                         </Ellipse.Fill>
                     </Ellipse>
                 </ControlTemplate>
@@ -55,7 +58,7 @@
                 <ControlTemplate TargetType="Button">
                     <Ellipse>
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="White.png" Stretch="UniformToFill"/>
+                            <ImageBrush ImageSource="Images\White.png" Stretch="UniformToFill"/>
                         </Ellipse.Fill>
                     </Ellipse>
                 </ControlTemplate>
@@ -73,7 +76,7 @@
                 <ControlTemplate TargetType="Button">
                     <Ellipse>
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="WhiteQueen.png" Stretch="UniformToFill"/>
+                            <ImageBrush ImageSource="Images\WhiteQueen.png" Stretch="UniformToFill"/>
                         </Ellipse.Fill>
                     </Ellipse>
                 </ControlTemplate>
@@ -91,7 +94,7 @@
                 <ControlTemplate TargetType="Button">
                     <Ellipse>
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="BlackQueen.png" Stretch="UniformToFill"/>
+                            <ImageBrush ImageSource="Images\BlackQueen.png" Stretch="UniformToFill"/>
                         </Ellipse.Fill>
                     </Ellipse>
                 </ControlTemplate>

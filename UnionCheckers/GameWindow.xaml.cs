@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Media;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +28,8 @@ namespace UnionCheckers
         private int CountMoveWhite;
         private int CountMoveBlack;
         private SoundPlayer sp;
+        //private static TcpListener _serverSocket; // объект для прослушки подключения клиента
+        //private static NetworkStream _stream; // объект для обмена данными с клиентом
 
         public GameWindow()
         {
@@ -37,9 +40,48 @@ namespace UnionCheckers
             InitGreenButtons();
             BlockDraughts("Black", ClickOnBlack);
             sp = new SoundPlayer();
-            sp.SoundLocation = @"step.wav";
+            sp.SoundLocation = "step.wav";
             sp.Load();
+            ServerBox.Text += $"Nick: {UserPageWindow.nickServer}\nRating: {UserPageWindow.ratingServer}";
         }
+
+        #region Connection
+
+        ///// <summary>
+        ///// Приём сообщения
+        ///// </summary>
+        ///// <returns>Возвращает строку с координатами необходимых перемещений на поле сервера</returns>
+        //private static string ReceiveMessage()
+        //{
+        //    var bytes = new byte[20];
+        //    _stream.Read(bytes, 0, bytes.Length);
+        //    return Encoding.UTF8.GetString(bytes);
+        //}
+
+        ///// <summary>
+        ///// Отправка сообщения
+        ///// </summary>
+        ///// <param name="message"> Координаты для клиента, для изменений на его поле</param>
+        //private static void SendMessage(string message)
+        //{
+        //    var bytes = Encoding.UTF8.GetBytes(message);
+        //    _stream.Write(bytes, 0, bytes.Length); // запись байтов в поток
+        //    _stream.Flush();
+        //}
+
+        ///// <summary>
+        ///// Обмен данными об игроках
+        ///// </summary>
+        ///// <param name="playerData"> Сведения об игроке: никнэйм и рейтинг игрока</param>
+        ///// <returns> Данные о противнике: никнэйм и рейтинг противника</returns>
+        //private static string DataChanging(string playerData)
+        //{
+        //    SendMessage(playerData);
+
+        //    return ReceiveMessage();
+        //}
+
+        #endregion Connection
 
         #region GameModul
 
@@ -57,6 +99,7 @@ namespace UnionCheckers
         {
             if (IsWin("White", "WhiteQueen"))
             {
+                Login.authUser.Rating--;
                 MessageBox.Show("Черные победили!");
                 Close();
                 var window = new UserPageWindow();
@@ -64,6 +107,7 @@ namespace UnionCheckers
             }
             else if (IsWin("Black", "BlackQueen"))
             {
+                Login.authUser.Rating++;
                 MessageBox.Show("Белые победили!");
                 Close();
                 var window = new UserPageWindow();

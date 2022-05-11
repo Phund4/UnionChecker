@@ -19,6 +19,7 @@ namespace UnionCheckers
     /// </summary>
     public partial class Login : Window
     {
+        public static Users authUser;
         public Login()
         {
             InitializeComponent();
@@ -28,7 +29,6 @@ namespace UnionCheckers
         {
             string login = textBoxLogin.Text.Trim();
             string password = passBox.Password.Trim();
-
             if (login.Length < 5)
             {
                 MessageBox.Show("Логин должен быть не менее 5 символов!");
@@ -40,7 +40,6 @@ namespace UnionCheckers
             }
             else
             {
-                Users authUser = null;
                 using (var db = new DB())
                 {
                     authUser = db.Users.Where(user => user.Login == login && user.Password == password).FirstOrDefault();

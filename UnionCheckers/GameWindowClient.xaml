@@ -9,7 +9,7 @@
     <Window.Resources>
         <ResourceDictionary Source="Styles.xaml"></ResourceDictionary>
     </Window.Resources>
-    
+
     <DockPanel>
 
         <Grid DockPanel.Dock="Top" Height="51">
@@ -30,10 +30,10 @@
 
             <Button Content="В главное меню" Click="ToMainMenu_Click" 
                     Grid.Column="2" Style="{x:Null}" Background="LightGreen" Foreground="White"></Button>
-            
+
         </Grid>
 
-        <TextBox DockPanel.Dock="Bottom"  IsReadOnly="True" Style="{StaticResource ForTextBoxes}" Height="60">
+        <TextBox DockPanel.Dock="Bottom" Style="{StaticResource ForTextBoxes}">
 
         </TextBox>
 
@@ -51,7 +51,7 @@
                 <RowDefinition Height="36*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Image Source="Field.png" Grid.ColumnSpan="3" Grid.RowSpan="3" />
+            <Image Source="Images\Field.png" Grid.ColumnSpan="3" Grid.RowSpan="3" />
 
 
             <Grid x:Name="Shashki" ShowGridLines="False"
@@ -156,7 +156,7 @@
 
         </Grid>
 
-        <TextBox DockPanel.Dock="Top" IsReadOnly="True" Style="{StaticResource ForTextBoxes}" Height="60">
+        <TextBox DockPanel.Dock="Top" Style="{StaticResource ForTextBoxes}">
 
         </TextBox>
 
