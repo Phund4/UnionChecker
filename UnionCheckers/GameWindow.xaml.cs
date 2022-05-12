@@ -42,7 +42,7 @@ namespace UnionCheckers
             sp = new SoundPlayer();
             sp.SoundLocation = "step.wav";
             sp.Load();
-            ServerBox.Text += $"Nick: {UserPageWindow.nickServer}\nRating: {UserPageWindow.ratingServer}";
+            //ServerBox.Text += $"Nick: {UserPageWindow.nickServer}\nRating: {UserPageWindow.ratingServer}";
         }
 
         #region Connection
