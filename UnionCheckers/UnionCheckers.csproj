@@ -184,6 +184,9 @@
     <Compile Include="GameWindowClient.xaml.cs">
       <DependentUpon>GameWindowClient.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IPAddressWindow.xaml.cs">
+      <DependentUpon>IPAddressWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserPageWindow.xaml.cs">
       <DependentUpon>UserPageWindow.xaml</DependentUpon>
     </Compile>
@@ -197,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GameWindowClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="IPAddressWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

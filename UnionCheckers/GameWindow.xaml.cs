@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Media;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -28,11 +29,15 @@ namespace UnionCheckers
         private int CountMoveWhite;
         private int CountMoveBlack;
         private SoundPlayer sp;
+        private const int Port = 9050;
+        private static TcpListener _serverSocket; // объект для прослушки подключения клиента
+        private static NetworkStream _stream; // объект для обмена данными с клиентом
         //private static TcpListener _serverSocket; // объект для прослушки подключения клиента
         //private static NetworkStream _stream; // объект для обмена данными с клиентом
 
         public GameWindow()
         {
+            ServerStarting();
             InitializeComponent();
             index = 0;
             CountMoveWhite = 1;
@@ -42,44 +47,54 @@ namespace UnionCheckers
             sp = new SoundPlayer();
             sp.SoundLocation = "step.wav";
             sp.Load();
-            //ServerBox.Text += $"Nick: {UserPageWindow.nickServer}\nRating: {UserPageWindow.ratingServer}";
+            var clientSocket = _serverSocket?.AcceptTcpClient(); // объект для взаимодействия с клиентом
+            _stream = clientSocket?.GetStream(); // запуск сервера
+            string serverData = $"{Login.authUser.Login}, {Login.authUser.Rating}";
+            ServerBox.Text = serverData;
+            ClientBox.Text = DataChanging(serverData);
         }
 
         #region Connection
 
-        ///// <summary>
-        ///// Приём сообщения
-        ///// </summary>
-        ///// <returns>Возвращает строку с координатами необходимых перемещений на поле сервера</returns>
-        //private static string ReceiveMessage()
-        //{
-        //    var bytes = new byte[20];
-        //    _stream.Read(bytes, 0, bytes.Length);
-        //    return Encoding.UTF8.GetString(bytes);
-        //}
+        private static void ServerStarting()
+        {
+            _serverSocket = new TcpListener(IPAddress.Any, Port); //TODO активное получение ip для передачи противнику
+            _serverSocket.Start(); // запуск сервера
+        }
 
-        ///// <summary>
-        ///// Отправка сообщения
-        ///// </summary>
-        ///// <param name="message"> Координаты для клиента, для изменений на его поле</param>
-        //private static void SendMessage(string message)
-        //{
-        //    var bytes = Encoding.UTF8.GetBytes(message);
-        //    _stream.Write(bytes, 0, bytes.Length); // запись байтов в поток
-        //    _stream.Flush();
-        //}
+        /// <summary>
+        /// Приём сообщения
+        /// </summary>
+        /// <returns>Возвращает строку с координатами необходимых перемещений на поле сервера</returns>
+        private static string ReceiveMessage()
+        {
+            var bytes = new byte[20];
+            _stream.Read(bytes, 0, bytes.Length);
+            return Encoding.UTF8.GetString(bytes);
+        }
 
-        ///// <summary>
-        ///// Обмен данными об игроках
-        ///// </summary>
-        ///// <param name="playerData"> Сведения об игроке: никнэйм и рейтинг игрока</param>
-        ///// <returns> Данные о противнике: никнэйм и рейтинг противника</returns>
-        //private static string DataChanging(string playerData)
-        //{
-        //    SendMessage(playerData);
+        /// <summary>
+        /// Отправка сообщения
+        /// </summary>
+        /// <param name="message"> Координаты для клиента, для изменений на его поле</param>
+        private static void SendMessage(string message)
+        {
+            var bytes = Encoding.UTF8.GetBytes(message);
+            _stream.Write(bytes, 0, bytes.Length); // запись байтов в поток
+            _stream.Flush();
+        }
 
-        //    return ReceiveMessage();
-        //}
+        /// <summary>
+        /// Обмен данными об игроках
+        /// </summary>
+        /// <param name="playerData"> Сведенья об игроке: никнэйм и рейтинг игрока</param>
+        /// <returns> Данные о противнике: никнэйм и рейтинг противника</returns>
+        private static string DataChanging(string playerData)
+        {
+            SendMessage(playerData);
+
+            return ReceiveMessage();
+        }
 
         #endregion Connection
 
@@ -157,6 +172,16 @@ namespace UnionCheckers
             Grid.SetColumn(button, y);
             Shashki.Children.Add(button);
         } // Добавить элемент в Grid
+
+        private void Changes(string coordinates)
+        {
+            int c = int.Parse(coordinates);
+            int xCut = c / 1000;
+            int yCut = c / 100 % 10;
+            int x = c / 10 % 10;
+            int y = c % 10;
+            CutDraught(x, y, xCut, yCut);
+        }
 
         private void DraughtMove(int x, int y)
         {
@@ -537,10 +562,10 @@ namespace UnionCheckers
             Button button = (Button)sender;
             Style style = new Style();
             style.TargetType = typeof(Button);
-            int x = Grid.GetRow(button);
-            int y = Grid.GetColumn(button);
             int xCut = Grid.GetRow(ButtonReserve);
             int yCut = Grid.GetColumn(ButtonReserve);
+            int x = Grid.GetRow(button);
+            int y = Grid.GetColumn(button);
             string coordinates = $"{xCut}{yCut}{x}{y}";
 
             ClearAllGreens();
@@ -632,10 +657,15 @@ namespace UnionCheckers
                 }
             }
 
+            SendMessage(coordinates);
+
             var sound = SoundAsync();
             await sound;
 
             IsWin();
+
+            coordinates = ReceiveMessage();
+            Changes(coordinates);
         } // Нажать на зеленую кнопку
 
         private void ClickOnBlack(object sender, RoutedEventArgs e)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,20 +16,23 @@ using System.Windows.Shapes;
 namespace UnionCheckers
 {
     /// <summary>
-    /// Логика взаимодействия для ClientConnection.xaml
+    /// Логика взаимодействия для IPAddressWindow.xaml
     /// </summary>
-    public partial class ClientConnection : Window
+    public partial class IPAddressWindow : Window
     {
-        public static string ip; 
-        public ClientConnection()
+        public IPAddressWindow()
         {
             InitializeComponent();
+            //foreach (var el in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+            //{
+            //    TextIP.Text += el.ToString();
+            //}
+            TextIP.Text += Dns.GetHostEntry(Dns.GetHostName()).AddressList[6].ToString();
         }
 
-        private void SendIP_Click(object sender, RoutedEventArgs e)
+        private void Ready_Click(object sender, RoutedEventArgs e)
         {
-            ip = TextBoxIP.Text;
-            GameWindowClient window = new GameWindowClient();
+            GameWindow window = new GameWindow();
             window.Show();
             Close();
         }

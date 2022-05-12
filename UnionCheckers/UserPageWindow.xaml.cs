@@ -42,15 +42,17 @@ namespace UnionCheckers
             //GameWindow gameWindow = new GameWindow();
             //gameWindow.Show();
             //Close();
-            MessageBox.Show($"Send Ip to your opponent:\n{Dns.GetHostEntry(Dns.GetHostName()).AddressList[1].ToString()}");
+            IPAddressWindow window = new IPAddressWindow();
+            window.Show();
+            Close();
         }
 
         private void Button_Connect_Click(object sender, RoutedEventArgs e)
         {
             //nickClient = Login.authUser.Login;
             //ratingClient = (int)Login.authUser.Rating;
-            GameWindowClient gameWindow = new GameWindowClient();
-            gameWindow.Show();
+            ClientConnection window = new ClientConnection();
+            window.Show();
             Close();
         }
 
