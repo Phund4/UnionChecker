@@ -19,7 +19,8 @@ namespace UnionCheckers
     /// </summary>
     public partial class ClientConnection : Window
     {
-        public static string ip; 
+
+        public static string ip;
         public ClientConnection()
         {
             InitializeComponent();

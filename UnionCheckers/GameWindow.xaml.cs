@@ -26,28 +26,24 @@ namespace UnionCheckers
         private Button[] arrGreenButtons;
         private Button ButtonReserve;
         private int index;
-        private int CountMoveWhite;
-        private int CountMoveBlack;
+        public static int CountMoveWhite;
         private SoundPlayer sp;
         private const int Port = 9050;
         private static TcpListener _serverSocket; // объект для прослушки подключения клиента
         private static NetworkStream _stream; // объект для обмена данными с клиентом
-        //private static TcpListener _serverSocket; // объект для прослушки подключения клиента
-        //private static NetworkStream _stream; // объект для обмена данными с клиентом
-
+        private static TcpClient clientSocket;
         public GameWindow()
         {
             ServerStarting();
             InitializeComponent();
             index = 0;
             CountMoveWhite = 1;
-            CountMoveBlack = 0;
             InitGreenButtons();
             BlockDraughts("Black", ClickOnBlack);
             sp = new SoundPlayer();
             sp.SoundLocation = "step.wav";
             sp.Load();
-            var clientSocket = _serverSocket?.AcceptTcpClient(); // объект для взаимодействия с клиентом
+            clientSocket = _serverSocket?.AcceptTcpClient(); // объект для взаимодействия с клиентом
             _stream = clientSocket?.GetStream(); // запуск сервера
             string serverData = $"{Login.authUser.Login}, {Login.authUser.Rating}";
             ServerBox.Text = serverData;
@@ -55,6 +51,12 @@ namespace UnionCheckers
         }
 
         #region Connection
+
+        private static void StopServer()
+        {
+            clientSocket.Close(); // прекращение связи с клиентом
+            _serverSocket.Stop();  // остановка  сервера
+        }
 
         private static void ServerStarting()
         {
@@ -66,9 +68,9 @@ namespace UnionCheckers
         /// Приём сообщения
         /// </summary>
         /// <returns>Возвращает строку с координатами необходимых перемещений на поле сервера</returns>
-        private static string ReceiveMessage()
+        private static string ReceiveMessage(int size)
         {
-            var bytes = new byte[20];
+            var bytes = new byte[size];
             _stream.Read(bytes, 0, bytes.Length);
             return Encoding.UTF8.GetString(bytes);
         }
@@ -93,7 +95,7 @@ namespace UnionCheckers
         {
             SendMessage(playerData);
 
-            return ReceiveMessage();
+            return ReceiveMessage(20);
         }
 
         #endregion Connection
@@ -180,6 +182,9 @@ namespace UnionCheckers
             int yCut = c / 100 % 10;
             int x = c / 10 % 10;
             int y = c % 10;
+            ButtonReserve = (Button)GetElementFromGrid(xCut, yCut);
+            Shashki.Children.Remove(ButtonReserve);
+            AddNewButtonToGrid(x, y, ButtonReserve);
             CutDraught(x, y, xCut, yCut);
         }
 
@@ -208,7 +213,7 @@ namespace UnionCheckers
 
         private void CutDraught(int x, int y, int xCut, int yCut)
         {
-            if ((x - xCut) >= 2 && (y - yCut) <= -2)
+            if ((x - xCut) >= 1 && (y - yCut) <= -1)
             {
                 xCut++;
                 yCut--;
@@ -219,7 +224,7 @@ namespace UnionCheckers
                     yCut--;
                 }
             }
-            else if ((x - xCut) >= 2 && (y - yCut) >= 2)
+            else if ((x - xCut) >= 1 && (y - yCut) >= 1)
             {
                 xCut++;
                 yCut++;
@@ -230,7 +235,7 @@ namespace UnionCheckers
                     yCut++;
                 }
             }
-            else if ((x - xCut) <= -2 && (y - yCut) <= -2)
+            else if ((x - xCut) <= -1 && (y - yCut) <= -1)
             {
                 xCut--;
                 yCut--;
@@ -241,7 +246,7 @@ namespace UnionCheckers
                     yCut--;
                 }
             }
-            else if ((x - xCut) <= -2 && (y - yCut) >= 2)
+            else if ((x - xCut) <= -1 && (y - yCut) >= 1)
             {
                 xCut--;
                 yCut++;
@@ -567,10 +572,14 @@ namespace UnionCheckers
             int x = Grid.GetRow(button);
             int y = Grid.GetColumn(button);
             string coordinates = $"{xCut}{yCut}{x}{y}";
-
             ClearAllGreens();
             Shashki.Children.Remove(ButtonReserve);
             AddNewButtonToGrid(x, y, ButtonReserve);
+
+            if (CheckDraughts("White", "Black", "BlackQueen", ClickWhiteToCut) || CheckQueens("WhiteQueen", "Black", "BlackQueen", ClickWhiteQueenToCut))
+            {
+                CountMoveWhite = 2;
+            }
 
             if (ButtonReserve.Content.ToString() == "White" || ButtonReserve.Content.ToString() == "WhiteQueen")
             {
@@ -586,51 +595,8 @@ namespace UnionCheckers
                         ButtonReserve.Click -= ClickWhiteToCut;
                         ButtonReserve.Click -= ClickWhiteToCut;
                     }
-                    if (!CheckDraughts("Black", "White", "WhiteQueen", ClickBlackToCut) && !CheckQueens("BlackQueen", "White", "WhiteQueen", ClickBlackQueenToCut))
-                    {
-                        CountMoveBlack = 1;
-                        GetActiveDraughts("Black", ClickOnBlack);
-                        GetActiveDraughts("BlackQueen", ClickOnQueen);
-                    }
-                    else if (CheckQueens("BlackQueen", "White", "WhiteQueen", ClickBlackQueenToCut) || CheckDraughts("Black", "White", "WhiteQueen", ClickBlackToCut))
-                    {
-                        CountMoveBlack = 2;
-                    }
-                    CountMoveWhite = 0;
-                    BlockDraughts("White", ClickOnWhite);
-                    BlockDraughts("WhiteQueen", ClickOnQueen);
                 }
-            }
-
-            else if (ButtonReserve.Content.ToString() == "Black" || ButtonReserve.Content.ToString() ==  "BlackQueen")
-            {
-                if (CountMoveBlack == 2)
-                {
-                    CutDraught(x, y, xCut, yCut);
-                    if (CheckQueens("BlackQueen", "White", "WhiteQueen", ClickBlackQueenToCut)) { }
-                }
-                if (CountMoveBlack == 1 || (!CheckDraughts("Black", "White", "WhiteQueen", ClickBlackToCut) && !CheckQueens("BlackQueen", "White", "WhiteQueen", ClickBlackQueenToCut)))
-                {
-                    if (ButtonReserve.Content.ToString() == "Black")
-                    {
-                        ButtonReserve.Click -= ClickBlackToCut;
-                        ButtonReserve.Click -= ClickBlackToCut;
-                    }
-                    if (!CheckDraughts("White", "Black", "BlackQueen", ClickWhiteToCut) && !CheckQueens("WhiteQueen", "Black", "BlackQueen", ClickWhiteQueenToCut))
-                    {
-                        CountMoveWhite = 1;
-                        GetActiveDraughts("White", ClickOnWhite);
-                        GetActiveDraughts("WhiteQueen", ClickOnQueen);
-                    }
-                    else if (CheckQueens("WhiteQueen", "Black", "BlackQueen", ClickWhiteQueenToCut) || CheckDraughts("White", "Black", "BlackQueen", ClickWhiteToCut))
-                    {
-                        CountMoveWhite = 2;
-                    }
-
-                    CountMoveBlack = 0;
-                    BlockDraughts("Black", ClickOnBlack);
-                    BlockDraughts("BlackQueen", ClickOnQueen);
-                }
+                CountMoveWhite = 1;
             }
 
             if (ButtonReserve.Content.ToString() == "White" && x == 7)
@@ -645,27 +611,22 @@ namespace UnionCheckers
                 }
             }
 
-            else if (ButtonReserve.Content.ToString() == "Black" && x == 0)
-            {
-                style.BasedOn = (Style)FindResource("ForBlackQueen");
-                ButtonReserve.Style = style;
-                ButtonReserve.Click -= ClickOnBlack;
-                ButtonReserve.Click -= ClickBlackToCut;
-                if (CheckQueens("BlackQueen", "White", "WhiteQueen", ClickBlackQueenToCut))
-                {
-
-                }
-            }
-
-            SendMessage(coordinates);
-
             var sound = SoundAsync();
             await sound;
 
+            SendMessage(coordinates);
             IsWin();
 
-            coordinates = ReceiveMessage();
-            Changes(coordinates);
+            var coord = ReceiveMessage(4);
+            if(coord == "Stop")
+            {
+                StopServer();
+                UserPageWindow window = new UserPageWindow();
+                window.Show();
+                Close();
+                return;
+            }
+            Changes(coord);
         } // Нажать на зеленую кнопку
 
         private void ClickOnBlack(object sender, RoutedEventArgs e)
@@ -757,6 +718,8 @@ namespace UnionCheckers
 
         private void ToMainMenu_Click(object sender, RoutedEventArgs e)
         {
+            SendMessage("Stop");
+            _serverSocket.Stop();
             UserPageWindow window = new UserPageWindow();
             window.Show();
             Close();

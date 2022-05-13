@@ -9,6 +9,7 @@
         <Setter Property="ItemsControl.Height" Value="60"/>
         <Setter Property="ItemsControl.FontSize" Value="20"/>
         <Setter Property="ItemsControl.FontStyle" Value="Italic"/>
+        
     </Style>
 
     <Style TargetType="{x:Type Button}" x:Key="ForDraught">
@@ -58,7 +59,7 @@
                 <ControlTemplate TargetType="Button">
                     <Ellipse>
                         <Ellipse.Fill>
-                            <ImageBrush ImageSource="Images\White.png" Stretch="UniformToFill"/>
+                            <ImageBrush ImageSource="White.png" Stretch="UniformToFill"/>
                         </Ellipse.Fill>
                     </Ellipse>
                 </ControlTemplate>

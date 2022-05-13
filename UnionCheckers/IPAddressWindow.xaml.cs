@@ -23,10 +23,6 @@ namespace UnionCheckers
         public IPAddressWindow()
         {
             InitializeComponent();
-            //foreach (var el in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
-            //{
-            //    TextIP.Text += el.ToString();
-            //}
             TextIP.Text += Dns.GetHostEntry(Dns.GetHostName()).AddressList[6].ToString();
         }
 
